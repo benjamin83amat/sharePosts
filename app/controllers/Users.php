@@ -60,6 +60,15 @@ class Users extends Controller {
                 //validated
                 
                 //hash the password
+                $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+                
+                // register user
+                if($this->userModel->register($data)) {
+                    flash('register_success', 'You are registred and now you can log in');
+                    redirect('users/login');
+                } else {
+                    die('Something went wrong!!!');
+                }
                 
                 
             } else {
@@ -107,6 +116,9 @@ class Users extends Controller {
             if(empty($data['password'])) {
                 $data['password_err'] = 'Please enter password';
             }
+            
+            //check for user/email
+            
             
             //make sure errors are empty
             if(empty($data['email_err']) && empty($data['password_err'])) {
